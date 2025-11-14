@@ -1,0 +1,11 @@
+{
+  "name": "social-media-post-adapter",
+  "version": "1.0.0",
+  "description": "Social Media Post Adapter with secure Claude API integration",
+  "scripts": {
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
