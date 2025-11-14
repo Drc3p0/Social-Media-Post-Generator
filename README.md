@@ -1,1 +1,2 @@
 This tool takes your social media post and adapts it to other platforms by modifying the tone, character count, hashtags, and more. Use checkboxes to determine what you want to adapt, hit generate, modify text, then copy it for pasting into your platforms. This uses my Claude API key, which is cheap, but does add up over time, so consider donating to cover costs. 
+https://social-post-generator.netlify.app/ 
