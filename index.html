@@ -413,6 +413,11 @@
                             <input type="checkbox" id="spicy">
                             <label for="spicy">Irritated/Spicy</label>
                         </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="allowProfanity">
+                            <label for="allowProfanity">Allow Profanity</label>
+                            <div class="option-description">Permits strong language when appropriate</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -624,6 +629,7 @@
             if (document.getElementById('creative').checked) options.tones.push('creative');
             if (document.getElementById('educational').checked) options.tones.push('educational');
             if (document.getElementById('spicy').checked) options.tones.push('irritated/spicy');
+            if (document.getElementById('allowProfanity').checked) options.tones.push('allow profanity when appropriate');
 
             return options;
         }
@@ -768,6 +774,7 @@ CRITICAL HUMAN-LIKE WRITING RULES - Follow these to make content undetectable as
 - Use platform-specific slang naturally (but don't overdo it)
 - Include genuine enthusiasm without being overly polished
 - Make it sound like someone actually talking, not writing an essay
+- PROFANITY RULE: ${options.tones.includes('allow profanity when appropriate') ? 'You may use mild to moderate profanity when it fits the tone and platform (avoid extreme profanity). Use sparingly and authentically.' : 'Keep all content family-friendly with no profanity or strong language.'}
 
 Please provide adaptations for these platforms with optimal character counts:
 
