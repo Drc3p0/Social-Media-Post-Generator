@@ -176,23 +176,30 @@ exports.handler = async (event, context) => {
       };
     }
 
-    if (prompt.length < MIN_POST_LENGTH) {
+    // Extract original post from prompt for length validation
+    const originalPostMatch = prompt.match(/Original post: "(.*?)"/s);
+    const originalPost = originalPostMatch ? originalPostMatch[1] : '';
+    
+    if (!originalPost) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: `Prompt too short. Minimum ${MIN_POST_LENGTH} characters.` })
+        body: JSON.stringify({ error: 'Could not extract original post from prompt' })
       };
     }
 
-    if (prompt.length > MAX_POST_LENGTH) {
+    if (originalPost.length < MIN_POST_LENGTH) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: `Prompt too long. Maximum ${MAX_POST_LENGTH} characters.` })
+        body: JSON.stringify({ error: `Post too short. Minimum ${MIN_POST_LENGTH} characters.` })
       };
     }
 
-    // Extract original post from prompt for content analysis
-    const originalPostMatch = prompt.match(/Original post: "(.*?)"/);
-    const originalPost = originalPostMatch ? originalPostMatch[1] : prompt;
+    if (originalPost.length > MAX_POST_LENGTH) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: `Post too long. Maximum ${MAX_POST_LENGTH} characters.` })
+      };
+    }
 
     // Check for spam content
     if (isSpamContent(originalPost)) {
