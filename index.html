@@ -536,13 +536,18 @@
             resize: vertical;
             margin-bottom: 15px;
             background: rgba(255, 255, 255, 0.8);
-            text-indent: 0;
-            padding-left: 15px;
+            text-indent: 0px;
         }
 
         .output-textarea:focus {
             outline: none;
             border-color: #8e44ad;
+        }
+
+        /* Ensure no text indentation or invisible spacing */
+        .output-textarea::placeholder {
+            color: #999;
+            opacity: 0.7;
         }
 
         .links-input {
@@ -881,7 +886,7 @@
                         <div class="platform-icon icon-instagram"></div>
                     </div>
                 </div>
-                <textarea class="output-textarea" id="instagramOutput"></textarea>
+                <textarea class="output-textarea" id="instagramOutput" placeholder="Adapted Instagram post will appear here..."></textarea>
                 <div class="output-actions">
                     <button class="copy-btn" onclick="copyToClipboard('instagramOutput', this)">Copy</button>
                     <div class="output-info">
@@ -898,7 +903,7 @@
                         <div class="platform-icon icon-x"></div>
                     </div>
                 </div>
-                <textarea class="output-textarea" id="xOutput"></textarea>
+                <textarea class="output-textarea" id="xOutput" placeholder="Adapted X (Twitter) post will appear here..."></textarea>
                 <div class="output-actions">
                     <button class="copy-btn" onclick="copyToClipboard('xOutput', this)">Copy</button>
                     <div class="output-info">
@@ -915,7 +920,7 @@
                         <div class="platform-icon icon-linkedin"></div>
                     </div>
                 </div>
-                <textarea class="output-textarea" id="linkedinOutput"></textarea>
+                <textarea class="output-textarea" id="linkedinOutput" placeholder="Adapted LinkedIn post will appear here..."></textarea>
                 <div class="output-actions">
                     <button class="copy-btn" onclick="copyToClipboard('linkedinOutput', this)">Copy</button>
                     <div class="output-info">
@@ -932,7 +937,7 @@
                         <div class="platform-icon icon-mastodon"></div>
                     </div>
                 </div>
-                <textarea class="output-textarea" id="mastodonOutput"></textarea>
+                <textarea class="output-textarea" id="mastodonOutput" placeholder="Adapted Mastodon post will appear here..."></textarea>
                 <div class="output-actions">
                     <button class="copy-btn" onclick="copyToClipboard('mastodonOutput', this)">Copy</button>
                     <div class="output-info">
@@ -949,7 +954,7 @@
                         <div class="platform-icon icon-bluesky"></div>
                     </div>
                 </div>
-                <textarea class="output-textarea" id="blueskyOutput"></textarea>
+                <textarea class="output-textarea" id="blueskyOutput" placeholder="Adapted BlueSky post will appear here..."></textarea>
                 <div class="output-actions">
                     <button class="copy-btn" onclick="copyToClipboard('blueskyOutput', this)">Copy</button>
                     <div class="output-info">
@@ -966,7 +971,7 @@
                         <div class="platform-icon icon-tiktok"></div>
                     </div>
                 </div>
-                <textarea class="output-textarea" id="tiktokOutput"></textarea>
+                <textarea class="output-textarea" id="tiktokOutput" placeholder="Adapted TikTok description will appear here..."></textarea>
                 <div class="output-actions">
                     <button class="copy-btn" onclick="copyToClipboard('tiktokOutput', this)">Copy</button>
                     <div class="output-info">
@@ -983,7 +988,7 @@
                         <div class="platform-icon icon-blog"></div>
                     </div>
                 </div>
-                <textarea class="output-textarea blog-textarea" id="blogOutput"></textarea>
+                <textarea class="output-textarea blog-textarea" id="blogOutput" placeholder="Adapted blog post content will appear here..."></textarea>
                 <div class="output-actions">
                     <button class="copy-btn" onclick="copyToClipboard('blogOutput', this)">Copy</button>
                     <div class="output-info">
@@ -1062,6 +1067,25 @@
                 } else {
                     charCounter.classList.remove('over-limit');
                 }
+            });
+
+            // Fix cursor positioning in output textareas
+            const outputTextareas = ['instagramOutput', 'xOutput', 'linkedinOutput', 'mastodonOutput', 'blueskyOutput', 'tiktokOutput', 'blogOutput'];
+            outputTextareas.forEach(id => {
+                const textarea = document.getElementById(id);
+                textarea.addEventListener('focus', function() {
+                    // Set cursor to beginning
+                    setTimeout(() => {
+                        textarea.setSelectionRange(0, 0);
+                    }, 1);
+                });
+                
+                textarea.addEventListener('click', function() {
+                    // Set cursor to beginning on click
+                    setTimeout(() => {
+                        textarea.setSelectionRange(0, 0);
+                    }, 1);
+                });
             });
 
             // Hidden trigger for adult content options
