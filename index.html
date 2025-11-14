@@ -361,7 +361,7 @@
             
             <div class="options-grid">
                 <div class="option-group">
-                    <h3>Modifications</h3>
+                    <h3>Content Modifications</h3>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="hashtags" checked>
@@ -373,11 +373,16 @@
                             <label for="topics">Enhance Topics</label>
                             <div class="option-description">Expand themes & keywords for better reach</div>
                         </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="addEmojis">
+                            <label for="addEmojis">Add Emojis</label>
+                            <div class="option-description">Include relevant emojis for engagement</div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="option-group">
-                    <h3>Tone Options</h3>
+                    <h3>Tone & Style</h3>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="autoAdapt" checked>
@@ -391,12 +396,6 @@
                             <input type="checkbox" id="professional">
                             <label for="professional">Professional</label>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="option-group">
-                    <h3>Additional Tones</h3>
-                    <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="casual">
                             <label for="casual">Casual</label>
@@ -409,14 +408,73 @@
                             <input type="checkbox" id="educational">
                             <label for="educational">Educational</label>
                         </div>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <h3>Language & Voice</h3>
+                    <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="spicy">
-                            <label for="spicy">Irritated/Spicy</label>
+                            <input type="checkbox" id="useCurrentSlang">
+                            <label for="useCurrentSlang">Use Current Slang</label>
+                            <div class="option-description">Include recent internet slang and expressions</div>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="allowProfanity">
                             <label for="allowProfanity">Allow Profanity</label>
                             <div class="option-description">Permits strong language when appropriate</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="spicy">
+                            <label for="spicy">Irritated/Spicy</label>
+                            <div class="option-description">Adds frustrated or edgy tone to content</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="controversy">
+                            <label for="controversy">Controversy/Hot Takes</label>
+                            <div class="option-description">Include mildly controversial opinions for engagement</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3>Audience Focus</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="personalBrand">
+                            <label for="personalBrand">Personal Brand</label>
+                            <div class="option-description">Write from individual perspective vs company</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="businessFocus">
+                            <label for="businessFocus">Business Focus</label>
+                            <div class="option-description">Target professional business audience</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <h3>Engagement Elements</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="callToAction">
+                            <label for="callToAction">Include Call-to-Action</label>
+                            <div class="option-description">Add engagement prompts (like, share, comment)</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="includeQuestions">
+                            <label for="includeQuestions">Include Questions</label>
+                            <div class="option-description">End with engaging questions for comments</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="storyElements">
+                            <label for="storyElements">Add Story Elements</label>
+                            <div class="option-description">Include narrative hooks and storytelling</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="behindScenes">
+                            <label for="behindScenes">Behind the Scenes</label>
+                            <div class="option-description">Add personal insights and process details</div>
                         </div>
                     </div>
                 </div>
@@ -612,24 +670,42 @@
         // Get selected options
         function getSelectedOptions() {
             const options = {
-                modifications: [],
+                contentMods: [],
                 tones: [],
+                languageVoice: [],
+                audienceFocus: [],
+                engagementElements: [],
                 characterStrategy: 'optimal' // Always use optimal now
             };
 
-            // Modifications
-            if (document.getElementById('hashtags').checked) options.modifications.push('add relevant hashtags');
-            if (document.getElementById('topics').checked) options.modifications.push('enhance topics and themes for better discoverability');
+            // Content Modifications
+            if (document.getElementById('hashtags').checked) options.contentMods.push('add relevant hashtags');
+            if (document.getElementById('topics').checked) options.contentMods.push('enhance topics and themes for better discoverability');
+            if (document.getElementById('addEmojis').checked) options.contentMods.push('add relevant emojis for engagement');
 
-            // Tones
+            // Tone & Style
             if (document.getElementById('autoAdapt').checked) options.tones.push('auto-adapt to platform audience');
             if (document.getElementById('uplifting').checked) options.tones.push('uplifting');
             if (document.getElementById('professional').checked) options.tones.push('professional');
             if (document.getElementById('casual').checked) options.tones.push('casual');
             if (document.getElementById('creative').checked) options.tones.push('creative');
             if (document.getElementById('educational').checked) options.tones.push('educational');
-            if (document.getElementById('spicy').checked) options.tones.push('irritated/spicy');
-            if (document.getElementById('allowProfanity').checked) options.tones.push('allow profanity when appropriate');
+
+            // Language & Voice
+            if (document.getElementById('useCurrentSlang').checked) options.languageVoice.push('use current internet slang and expressions');
+            if (document.getElementById('allowProfanity').checked) options.languageVoice.push('allow profanity when appropriate');
+            if (document.getElementById('spicy').checked) options.languageVoice.push('irritated/spicy tone');
+            if (document.getElementById('controversy').checked) options.languageVoice.push('include mildly controversial opinions for engagement');
+
+            // Audience Focus
+            if (document.getElementById('personalBrand').checked) options.audienceFocus.push('write from individual perspective rather than company voice');
+            if (document.getElementById('businessFocus').checked) options.audienceFocus.push('target professional business audience');
+
+            // Engagement Elements
+            if (document.getElementById('callToAction').checked) options.engagementElements.push('include call-to-action prompts');
+            if (document.getElementById('includeQuestions').checked) options.engagementElements.push('end with engaging questions for comments');
+            if (document.getElementById('storyElements').checked) options.engagementElements.push('include narrative hooks and storytelling elements');
+            if (document.getElementById('behindScenes').checked) options.engagementElements.push('add behind-the-scenes insights and process details');
 
             return options;
         }
@@ -754,12 +830,17 @@
         }
 
         function createPrompt(originalPost, options) {
+            // Combine all selected options into readable lists
+            const allModifications = options.contentMods.concat(options.engagementElements);
+            const allToneElements = options.tones.concat(options.languageVoice);
+            
             return `Please adapt the following social media post for different platforms using OPTIMAL character counts for maximum engagement.
 
 Original post: "${originalPost}"
 
-Selected modifications: ${options.modifications.join(', ')}
-Selected tones: ${options.tones.join(', ')}
+CONTENT MODIFICATIONS: ${allModifications.length > 0 ? allModifications.join(', ') : 'none selected'}
+TONE & STYLE: ${allToneElements.length > 0 ? allToneElements.join(', ') : 'none selected'}
+AUDIENCE FOCUS: ${options.audienceFocus.length > 0 ? options.audienceFocus.join(', ') : 'general audience'}
 
 CRITICAL HUMAN-LIKE WRITING RULES - Follow these to make content undetectable as AI-written:
 - NEVER use em dashes (—) - use regular hyphens (-) or other punctuation
@@ -774,7 +855,7 @@ CRITICAL HUMAN-LIKE WRITING RULES - Follow these to make content undetectable as
 - Use platform-specific slang naturally (but don't overdo it)
 - Include genuine enthusiasm without being overly polished
 - Make it sound like someone actually talking, not writing an essay
-- PROFANITY RULE: ${options.tones.includes('allow profanity when appropriate') ? 'You may use mild to moderate profanity when it fits the tone and platform (avoid extreme profanity). Use sparingly and authentically.' : 'Keep all content family-friendly with no profanity or strong language.'}
+- PROFANITY RULE: ${options.languageVoice.includes('allow profanity when appropriate') ? 'You may use mild to moderate profanity when it fits the tone and platform (avoid extreme profanity). Use sparingly and authentically.' : 'Keep all content family-friendly with no profanity or strong language.'}
 
 Please provide adaptations for these platforms with optimal character counts:
 
@@ -812,7 +893,7 @@ Format your response exactly like this:
 Make sure each adaptation:
 - Uses optimal character counts for maximum engagement
 - Sounds genuinely human-written using the rules above
-- Incorporates selected modifications appropriately
+- Incorporates ALL selected modifications, tones, and audience focus appropriately
 - Matches the platform's audience and tone
 - Maintains the core message while optimizing for platform-specific engagement`;
         }
