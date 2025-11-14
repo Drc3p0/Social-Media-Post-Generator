@@ -536,6 +536,45 @@
             resize: vertical;
             margin-bottom: 15px;
             background: rgba(255, 255, 255, 0.8);
+            text-indent: 0;
+            padding-left: 15px;
+        }
+
+        .output-textarea:focus {
+            outline: none;
+            border-color: #8e44ad;
+        }
+
+        .links-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 8px;
+            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            text-indent: 0;
+            padding-left: 12px;
+        }
+
+        .notes-input {
+            width: 100%;
+            min-height: 90px;
+            padding: 12px;
+            border: 2px solid #e8d5ff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 8px;
+            transition: border-color 0.3s;
+            background: rgba(232, 213, 255, 0.3);
+            text-indent: 0;
+            padding-left: 12px;
         }
 
         .blog-textarea {
@@ -671,7 +710,7 @@
                 <textarea 
                     class="links-input" 
                     id="referenceLinks" 
-                    placeholder="Add any reference links here (one per line)&#10;https://example.com/article&#10;https://youtube.com/watch?v=...&#10;https://github.com/project">
+                    placeholder="Add reference links here (optional - one per line)&#10;&#10;Examples:&#10;https://myportfolio.com/project&#10;https://youtube.com/watch?v=demo&#10;https://github.com/myrepo&#10;https://blog.example.com/article&#10;&#10;Claude will incorporate context from these links into your adapted posts">
                 </textarea>
                 <div class="links-description">Add links that relate to your post content. Claude will reference these when adapting your posts.</div>
             </div>
@@ -681,7 +720,7 @@
                 <textarea 
                     class="notes-input" 
                     id="internalNotes" 
-                    placeholder="Add private instructions for Claude here...&#10;Examples:&#10;- Emphasize the technical aspects&#10;- Avoid mentioning competitors&#10;- Focus on beginner-friendly language&#10;- This was a struggle, show vulnerability&#10;- Target audience is developers&#10;- Keep it lighthearted despite serious topic">
+                    placeholder="Private instructions for Claude (optional - won't appear in final posts)&#10;&#10;Examples:&#10;• Focus on the technical innovation aspects&#10;• Keep it humble despite this being a big achievement&#10;• Target audience is beginners, use simple language&#10;• This was actually quite challenging, show some struggle&#10;• Make it sound more confident than I actually feel&#10;• Emphasize the community/collaboration angle&#10;• Avoid mentioning specific companies or competitors&#10;&#10;These notes guide how Claude adapts your content but won't appear in the final posts">
                 </textarea>
                 <div class="notes-description">Private instructions for Claude. This content will guide the adaptation but won't appear in your final posts.</div>
             </div>
@@ -1271,7 +1310,8 @@
                 }
                 
                 if (!data.success) {
-                    throw new Error(data.error || 'Failed to generate posts');
+                    showErrorFeedback(`Generation Error: ${data.error || 'Failed to generate posts'}`);
+                    return;
                 }
                 
                 const claudeResponse = data.content;
@@ -1283,10 +1323,18 @@
                     claudeResponse.includes("contains sexually suggestive") ||
                     claudeResponse.includes("explicit content") ||
                     claudeResponse.includes("I can't create content") ||
-                    claudeResponse.includes("safety guidelines")
+                    claudeResponse.includes("safety guidelines") ||
+                    claudeResponse.includes("sexually explicit") ||
+                    claudeResponse.includes("mature themes") ||
+                    claudeResponse.includes("adult content")
                 )) {
-                    // Show helpful feedback instead of blank results
                     showContentPolicyFeedback();
+                    return;
+                }
+
+                // Check for empty or very short responses (possible failures)
+                if (!claudeResponse || claudeResponse.trim().length < 50) {
+                    showErrorFeedback("Generation failed - received empty or incomplete response from Claude. Please try again with different content or settings.");
                     return;
                 }
 
@@ -1308,60 +1356,86 @@
 
             } catch (error) {
                 console.error('Error generating posts:', error);
-                alert(`Error: ${error.message}`);
+                showErrorFeedback(`Generation failed: ${error.message}`);
             } finally {
                 // Reset loading indicator
                 loadingIndicator.style.display = 'none';
             }
         }
 
-        // Show helpful feedback when Claude refuses content
-        function showContentPolicyFeedback() {
-            // Clear any existing content
+        // Show general error feedback in Instagram textbox
+        function showErrorFeedback(errorMessage) {
             const platforms = ['instagramOutput', 'xOutput', 'linkedinOutput', 'mastodonOutput', 'blueskyOutput', 'tiktokOutput', 'blogOutput'];
             platforms.forEach(id => {
                 document.getElementById(id).value = '';
             });
 
-            // Show the results grid with feedback message
             const outputsGrid = document.getElementById('outputsGrid');
             outputsGrid.style.display = 'grid';
             
-            // Create feedback message
-            const feedbackMessage = `⚠️ CONTENT POLICY NOTICE
+            const feedbackMessage = `❌ GENERATION ERROR
 
-Your content was too explicit for Claude's content policies. Even with X-rated options enabled, Claude won't enhance already sexual content.
+${errorMessage}
 
-🎯 HOW TO FIX THIS:
+🔄 WHAT TO TRY:
+- Check your internet connection
+- Make sure your content isn't too long
+- Try different tone options
+- Refresh the page if problems persist
+- Wait a moment and try again
 
-✅ START WITH INNOCENT CONTENT:
-Instead of: "Let's feel each other's bodies..."
-Try: "Just got new LED earrings for dancing tonight!"
+If the error continues, there may be a temporary issue with the service.`;
 
-✅ USE INTERNAL NOTES FOR DIRECTION:
-Original: Keep it clean and neutral
-Internal Notes: "Make this sound exciting and electric"
-
-✅ LET X-RATED ADD THE SPICE:
-The X-rated option will transform innocent content into suggestive language using metaphors and double meanings.
-
-🔄 TRY AGAIN WITH:
-- Remove explicit language from your original post
-- Start with innocent content about the same topic
-- Use Internal Notes to guide the tone instead
-- Let the X-rated option do the suggestive transformation
-
-💡 EXAMPLES THAT WORK:
-"New electronics project finished!" → Becomes suggestive
-"Great workout today!" → Gets steamy undertones  
-"Cooking something special tonight!" → Takes on sensual meaning
-
-The more innocent your starting content, the better the suggestive results!`;
-
-            // Put feedback in the Instagram output (first visible box)
             document.getElementById('instagramOutput').value = feedbackMessage;
+            outputsGrid.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show helpful feedback when Claude refuses content
+        function showContentPolicyFeedback() {
+            const platforms = ['instagramOutput', 'xOutput', 'linkedinOutput', 'mastodonOutput', 'blueskyOutput', 'tiktokOutput', 'blogOutput'];
+            platforms.forEach(id => {
+                document.getElementById(id).value = '';
+            });
+
+            const outputsGrid = document.getElementById('outputsGrid');
+            outputsGrid.style.display = 'grid';
             
-            // Scroll to results
+            const feedbackMessage = `⚠️ CONTENT TOO EXPLICIT FOR CLAUDE
+
+Your content contains explicit language that Claude's safety guidelines won't allow, even with X-rated options enabled.
+
+🎯 HOW TO MAKE IT WORK:
+
+✅ REPLACE EXPLICIT TERMS:
+Instead of: "body", "feel each other", "penetrate", "climax"
+Use: "presence", "connect", "immerse", "peak moment"
+
+✅ USE SUGGESTIVE METAPHORS:
+Instead of: Direct sexual references
+Try: "electric connection", "rising energy", "magnetic pull", "intense heat"
+
+✅ FOCUS ON EMOTIONS/SENSATIONS:
+Instead of: Physical descriptions
+Use: "overwhelming sensation", "breathless moment", "pulse racing", "electric anticipation"
+
+✅ CREATIVE OBJECT DESCRIPTIONS:
+Instead of: Phallic references
+Try: "sleek cylindrical design", "firm grip", "smooth curves", "powerful thrust (of innovation)"
+
+🔄 REFINEMENT STRATEGY:
+1. Remove any body part references
+2. Replace sexual verbs with emotional/technical terms
+3. Use electronics metaphors (voltage, current, spark, surge)
+4. Focus on feelings rather than actions
+5. Let the X-rated option add the suggestive tone
+
+💡 WORKING EXAMPLE:
+Original: "LED earrings light up when we connect"
+X-rated transform: "These accessories surge with electric energy when the connection is made"
+
+Try rewriting your post using emotional/technical language and let the AI add the spice!`;
+
+            document.getElementById('instagramOutput').value = feedbackMessage;
             outputsGrid.scrollIntoView({ behavior: 'smooth' });
         }
         async function copyAllPosts() {
