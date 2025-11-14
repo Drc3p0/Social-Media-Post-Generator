@@ -323,6 +323,20 @@
             background: rgba(232, 213, 255, 0.5);
         }
 
+        /* Aggressive textarea resets to fix cursor positioning */
+        .main-input, .links-input, .notes-input, .output-textarea {
+            text-indent: 0 !important;
+            padding-left: 12px !important;
+            text-align: left !important;
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+        }
+
+        /* Remove any potential invisible characters */
+        .main-input::before, .links-input::before, .notes-input::before, .output-textarea::before {
+            content: none !important;
+        }
+
         .notes-description {
             font-size: 12px;
             color: #8e44ad;
@@ -698,11 +712,7 @@
 
         <div class="input-section">
             <label for="originalPost" class="post-label">Your Original Post</label>
-            <textarea 
-                class="main-input" 
-                id="originalPost" 
-                placeholder="Type your post here...">
-            </textarea>
+            <textarea class="main-input" id="originalPost" placeholder="Type your post here..."></textarea>
             <div class="post-guidance">
                 <div class="guidance-row">
                     <span class="char-counter" id="postCharCount">0 / 2000 characters</span>
@@ -712,21 +722,13 @@
             
             <div class="links-section">
                 <label for="referenceLinks" class="links-label">Reference Links (optional)</label>
-                <textarea 
-                    class="links-input" 
-                    id="referenceLinks" 
-                    placeholder="Add reference links here (optional - one per line)&#10;&#10;Examples:&#10;https://myportfolio.com/project&#10;https://youtube.com/watch?v=demo&#10;https://github.com/myrepo&#10;https://blog.example.com/article&#10;&#10;Claude will incorporate context from these links into your adapted posts">
-                </textarea>
+                <textarea class="links-input" id="referenceLinks" placeholder="Add reference links here (optional - one per line)&#10;&#10;Examples:&#10;https://myportfolio.com/project&#10;https://youtube.com/watch?v=demo&#10;https://github.com/myrepo&#10;https://blog.example.com/article&#10;&#10;Claude will incorporate context from these links into your adapted posts"></textarea>
                 <div class="links-description">Add links that relate to your post content. Claude will reference these when adapting your posts.</div>
             </div>
 
             <div class="notes-section">
                 <label for="internalNotes" class="notes-label">Internal Notes to Claude (optional)</label>
-                <textarea 
-                    class="notes-input" 
-                    id="internalNotes" 
-                    placeholder="Private instructions for Claude (optional - won't appear in final posts)&#10;&#10;Examples:&#10;• Focus on the technical innovation aspects&#10;• Keep it humble despite this being a big achievement&#10;• Target audience is beginners, use simple language&#10;• This was actually quite challenging, show some struggle&#10;• Make it sound more confident than I actually feel&#10;• Emphasize the community/collaboration angle&#10;• Avoid mentioning specific companies or competitors&#10;&#10;These notes guide how Claude adapts your content but won't appear in the final posts">
-                </textarea>
+                <textarea class="notes-input" id="internalNotes" placeholder="Private instructions for Claude (optional - won't appear in final posts)&#10;&#10;Examples:&#10;• Focus on the technical innovation aspects&#10;• Keep it humble despite this being a big achievement&#10;• Target audience is beginners, use simple language&#10;• This was actually quite challenging, show some struggle&#10;• Make it sound more confident than I actually feel&#10;• Emphasize the community/collaboration angle&#10;• Avoid mentioning specific companies or competitors&#10;&#10;These notes guide how Claude adapts your content but won't appear in the final posts"></textarea>
                 <div class="notes-description">Private instructions for Claude. This content will guide the adaptation but won't appear in your final posts.</div>
             </div>
             
@@ -810,6 +812,26 @@
                             <label for="seductive">Seductive</label>
                             <div class="option-description">Adds alluring and captivating language</div>
                         </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="loving">
+                            <label for="loving">Loving</label>
+                            <div class="option-description">Warm, affectionate, and heartfelt tone</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="playful">
+                            <label for="playful">Playful</label>
+                            <div class="option-description">Fun, lighthearted, and whimsical language</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="enthusiastic">
+                            <label for="enthusiastic">Enthusiastic</label>
+                            <div class="option-description">High energy and infectious excitement</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="gratitude">
+                            <label for="gratitude">Grateful/Appreciative</label>
+                            <div class="option-description">Emphasizes thankfulness and appreciation</div>
+                        </div>
                         <div class="checkbox-item x-rated-option" id="xRatedOption">
                             <input type="checkbox" id="xRated">
                             <label for="xRated">X-Rated Content</label>
@@ -830,6 +852,11 @@
                             <input type="checkbox" id="businessFocus">
                             <label for="businessFocus">Business Focus</label>
                             <div class="option-description">Target professional business audience</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="journalEntry">
+                            <label for="journalEntry">Journal Entry</label>
+                            <div class="option-description">Personal, first-person reflective writing style</div>
                         </div>
                     </div>
                 </div>
@@ -1069,23 +1096,38 @@
                 }
             });
 
-            // Fix cursor positioning in output textareas
-            const outputTextareas = ['instagramOutput', 'xOutput', 'linkedinOutput', 'mastodonOutput', 'blueskyOutput', 'tiktokOutput', 'blogOutput'];
-            outputTextareas.forEach(id => {
+            // Fix cursor positioning in ALL textareas - aggressive approach
+            const allTextareas = ['originalPost', 'referenceLinks', 'internalNotes', 'instagramOutput', 'xOutput', 'linkedinOutput', 'mastodonOutput', 'blueskyOutput', 'tiktokOutput', 'blogOutput'];
+            allTextareas.forEach(id => {
                 const textarea = document.getElementById(id);
-                textarea.addEventListener('focus', function() {
-                    // Set cursor to beginning
-                    setTimeout(() => {
-                        textarea.setSelectionRange(0, 0);
-                    }, 1);
-                });
-                
-                textarea.addEventListener('click', function() {
-                    // Set cursor to beginning on click
-                    setTimeout(() => {
-                        textarea.setSelectionRange(0, 0);
-                    }, 1);
-                });
+                if (textarea) {
+                    // Force cursor to beginning on focus
+                    textarea.addEventListener('focus', function(e) {
+                        setTimeout(() => {
+                            textarea.setSelectionRange(0, 0);
+                            textarea.scrollTop = 0;
+                            textarea.scrollLeft = 0;
+                        }, 10);
+                    });
+                    
+                    // Force cursor to beginning on click
+                    textarea.addEventListener('click', function(e) {
+                        setTimeout(() => {
+                            textarea.setSelectionRange(0, 0);
+                            textarea.scrollTop = 0;
+                            textarea.scrollLeft = 0;
+                        }, 10);
+                    });
+                    
+                    // Force cursor to beginning on mousedown
+                    textarea.addEventListener('mousedown', function(e) {
+                        setTimeout(() => {
+                            textarea.setSelectionRange(0, 0);
+                            textarea.scrollTop = 0;
+                            textarea.scrollLeft = 0;
+                        }, 50);
+                    });
+                }
             });
 
             // Hidden trigger for adult content options
@@ -1206,11 +1248,16 @@
             if (document.getElementById('spicy').checked) options.languageVoice.push('irritated/spicy tone');
             if (document.getElementById('controversy').checked) options.languageVoice.push('include mildly controversial opinions for engagement');
             if (document.getElementById('seductive').checked) options.languageVoice.push('use seductive and alluring language');
+            if (document.getElementById('loving').checked) options.languageVoice.push('use warm, loving, and affectionate language');
+            if (document.getElementById('playful').checked) options.languageVoice.push('use playful, fun, and whimsical language');
+            if (document.getElementById('enthusiastic').checked) options.languageVoice.push('use highly enthusiastic and energetic language');
+            if (document.getElementById('gratitude').checked) options.languageVoice.push('emphasize gratitude, appreciation, and thankfulness');
             if (document.getElementById('xRated').checked) options.languageVoice.push('use suggestive and provocative language appropriate for mature creative writing, with sensual metaphors, double entendres, and creative visual descriptions that imply rather than state explicitly');
 
             // Audience Focus
             if (document.getElementById('personalBrand').checked) options.audienceFocus.push('write from individual perspective rather than company voice');
             if (document.getElementById('businessFocus').checked) options.audienceFocus.push('target professional business audience');
+            if (document.getElementById('journalEntry').checked) options.audienceFocus.push('write in personal, first-person reflective journal style with intimate and introspective tone');
 
             // Engagement Elements
             if (document.getElementById('callToAction').checked) options.engagementElements.push('include call-to-action prompts');
