@@ -1068,14 +1068,20 @@
             let clickCount = 0;
             let ageVerified = false;
             
+            console.log('Hidden trigger initialized:', hiddenTrigger);
+            
             hiddenTrigger.addEventListener('click', function() {
                 clickCount++;
+                console.log('Hidden trigger clicked, count:', clickCount);
+                
                 if (clickCount === 3) {
+                    console.log('Triple click detected, age verified:', ageVerified);
+                    
                     if (!ageVerified) {
-                        // Show age verification modal
+                        console.log('Showing age verification modal');
                         ageModal.style.display = 'flex';
                     } else {
-                        // Already verified, show both options directly
+                        console.log('Age already verified, showing options');
                         xRatedOption.classList.add('revealed');
                         xxxRatedOption.classList.add('revealed');
                         hiddenTrigger.style.display = 'none';
@@ -1084,12 +1090,16 @@
                 
                 // Reset click count after 2 seconds
                 setTimeout(() => {
-                    clickCount = 0;
+                    if (clickCount < 3) {
+                        console.log('Click count reset');
+                        clickCount = 0;
+                    }
                 }, 2000);
             });
 
             // Age verification handlers
             ageYes.addEventListener('click', function() {
+                console.log('Age verification: Yes clicked');
                 ageVerified = true;
                 ageModal.style.display = 'none';
                 xRatedOption.classList.add('revealed');
@@ -1098,23 +1108,26 @@
                 
                 // Store verification in session (not persistent)
                 sessionStorage.setItem('ageVerified', 'true');
+                console.log('Adult content options revealed');
             });
 
             ageNo.addEventListener('click', function() {
+                console.log('Age verification: No clicked');
                 ageModal.style.display = 'none';
                 alert('Adult content features are not available for users under 18.');
-                // Reset everything
                 clickCount = 0;
             });
 
             // Check if age was already verified in this session
             if (sessionStorage.getItem('ageVerified') === 'true') {
+                console.log('Age verification found in session storage');
                 ageVerified = true;
             }
 
             // Close modal if clicked outside
             ageModal.addEventListener('click', function(e) {
                 if (e.target === ageModal) {
+                    console.log('Modal closed by clicking outside');
                     ageModal.style.display = 'none';
                 }
             });
@@ -1266,7 +1279,19 @@
                     })
                 });
 
-                const data = await response.json();
+                // Debug: Log response details
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+
+                let data;
+                try {
+                    const responseText = await response.text();
+                    console.log('Raw response:', responseText);
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    throw new Error(`Server returned invalid response. Status: ${response.status}. Please check the console for details.`);
+                }
                 
                 if (!response.ok) {
                     if (response.status === 429) {
@@ -1278,7 +1303,7 @@
                     } else if (response.status === 400) {
                         throw new Error(data.error || 'Invalid request');
                     } else {
-                        throw new Error(`Server error: ${response.status}`);
+                        throw new Error(`Server error: ${response.status}. ${data.error || ''}`);
                     }
                 }
                 
