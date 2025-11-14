@@ -637,10 +637,27 @@
                 return;
             }
 
+            // Check minimum length
+            if (originalPost.length < 10) {
+                alert('Post is too short. Please enter at least 10 characters.');
+                return;
+            }
+
+            // Check maximum length
+            if (originalPost.length > 2000) {
+                alert('Post is too long. Please keep it under 2000 characters.');
+                return;
+            }
+
             const options = getSelectedOptions();
             const generateBtn = document.getElementById('generateBtn');
             const loadingIndicator = document.getElementById('loadingIndicator');
             const outputsGrid = document.getElementById('outputsGrid');
+
+            // Check if button is in cooldown
+            if (generateBtn.disabled && generateBtn.textContent.includes('seconds')) {
+                return;
+            }
 
             // Show loading state
             generateBtn.disabled = true;
@@ -663,11 +680,21 @@
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`API request failed: ${response.status}`);
-                }
-
                 const data = await response.json();
+                
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        // Rate limited
+                        const retryAfter = data.retryAfter || 60;
+                        throw new Error(`${data.error}\n\nPlease try again in ${retryAfter} seconds.`);
+                    } else if (response.status === 403) {
+                        throw new Error('Access denied. Please refresh the page and try again.');
+                    } else if (response.status === 400) {
+                        throw new Error(data.error || 'Invalid request');
+                    } else {
+                        throw new Error(`Server error: ${response.status}`);
+                    }
+                }
                 
                 if (!data.success) {
                     throw new Error(data.error || 'Failed to generate posts');
@@ -682,15 +709,42 @@
                 outputsGrid.style.display = 'grid';
                 outputsGrid.scrollIntoView({ behavior: 'smooth' });
 
+                // Start cooldown timer (30 seconds)
+                startCooldown(30);
+
+                // Show rate limit info if provided
+                if (data.rateLimitRemaining !== undefined) {
+                    console.log(`Rate limit: ${data.rateLimitRemaining} requests remaining (${data.dailyRemaining} daily)`);
+                }
+
             } catch (error) {
                 console.error('Error generating posts:', error);
-                alert('Error generating posts. Please check your API configuration and try again.');
+                alert(`Error: ${error.message}`);
             } finally {
-                // Reset UI
-                generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate Adapted Posts';
+                // Reset loading indicator
                 loadingIndicator.style.display = 'none';
             }
+        }
+
+        // Cooldown timer function
+        function startCooldown(seconds) {
+            const generateBtn = document.getElementById('generateBtn');
+            let remainingSeconds = seconds;
+            
+            const countdown = () => {
+                generateBtn.disabled = true;
+                generateBtn.textContent = `Please wait ${remainingSeconds} seconds`;
+                remainingSeconds--;
+                
+                if (remainingSeconds < 0) {
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = 'Generate Adapted Posts';
+                } else {
+                    setTimeout(countdown, 1000);
+                }
+            };
+            
+            countdown();
         }
 
         function createPrompt(originalPost, options) {
