@@ -36,6 +36,177 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 10px;
+            position: relative;
+        }
+
+        .hidden-trigger {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            cursor: pointer;
+            opacity: 0.15;
+            transition: opacity 0.3s;
+            font-size: 1.5rem;
+            color: #8e44ad;
+            user-select: none;
+        }
+
+        .hidden-trigger:hover {
+            opacity: 0.8;
+        }
+
+        .x-rated-option {
+            display: none !important;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .x-rated-option.revealed {
+            display: flex !important;
+        }
+
+        .x-rated-option .checkbox-item {
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 8px;
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .x-rated-option label {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .x-rated-option .option-description {
+            color: #c0392b;
+        }
+
+        .xxx-rated-option {
+            display: none !important;
+            animation: slideIn 0.3s ease-out 0.1s;
+        }
+
+        .xxx-rated-option.revealed {
+            display: flex !important;
+        }
+
+        .xxx-rated-option .checkbox-item {
+            border: 2px solid #8e44ad;
+            border-radius: 6px;
+            padding: 8px;
+            background: rgba(142, 68, 173, 0.15);
+            box-shadow: 0 0 10px rgba(142, 68, 173, 0.2);
+        }
+
+        .xxx-rated-option label {
+            color: #8e44ad;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .xxx-rated-option .option-description {
+            color: #7d3c98;
+            font-weight: 600;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .age-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .age-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .age-modal-content h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .age-modal-content p {
+            margin-bottom: 15px;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .age-modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .age-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .age-yes {
+            background: #27ae60;
+            color: white;
+        }
+
+        .age-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .age-no {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .age-no:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .age-modal-footer {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+
+        .age-modal-footer small {
+            color: #666;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-50px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .header p {
@@ -499,7 +670,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Social Media Post Adapter</h1>
+            <h1>Social Media Post Adapter<span class="hidden-trigger" id="hiddenTrigger">.</span></h1>
             <p>Optimize your posts for maximum engagement across all platforms</p>
         </div>
 
@@ -611,6 +782,21 @@
                             <input type="checkbox" id="controversy">
                             <label for="controversy">Controversy/Hot Takes</label>
                             <div class="option-description">Include mildly controversial opinions for engagement</div>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="seductive">
+                            <label for="seductive">Seductive</label>
+                            <div class="option-description">Adds alluring and captivating language</div>
+                        </div>
+                        <div class="checkbox-item x-rated-option" id="xRatedOption">
+                            <input type="checkbox" id="xRated">
+                            <label for="xRated">X-Rated Content</label>
+                            <div class="option-description">Mature adult content for creative writing (18+)</div>
+                        </div>
+                        <div class="checkbox-item xxx-rated-option" id="xxxRatedOption">
+                            <input type="checkbox" id="xxxRated">
+                            <label for="xxxRated">XXX-Rated Content</label>
+                            <div class="option-description">Explicit adult content for mature fiction (18+)</div>
                         </div>
                     </div>
                 </div>
@@ -803,6 +989,22 @@
         </div>
     </div>
 
+    <!-- Age Verification Modal -->
+    <div class="age-modal" id="ageModal" style="display: none;">
+        <div class="age-modal-content">
+            <h3>Age Verification Required</h3>
+            <p>The X-Rated Content feature is intended for creative writing purposes only and contains mature themes suitable for adults.</p>
+            <p><strong>Are you 18 years of age or older?</strong></p>
+            <div class="age-modal-buttons">
+                <button class="age-btn age-yes" id="ageYes">Yes, I am 18+</button>
+                <button class="age-btn age-no" id="ageNo">No, I am under 18</button>
+            </div>
+            <div class="age-modal-footer">
+                <small>This feature is for legitimate creative writing purposes such as fantasy novels, adult fiction, and literary content.</small>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Character count tracking
         function updateCharacterCount(textareaId, countId, optimalRange) {
@@ -847,6 +1049,67 @@
                     charCounter.classList.add('over-limit');
                 } else {
                     charCounter.classList.remove('over-limit');
+                }
+            });
+
+            // Hidden trigger for adult content options
+            const hiddenTrigger = document.getElementById('hiddenTrigger');
+            const xRatedOption = document.getElementById('xRatedOption');
+            const xxxRatedOption = document.getElementById('xxxRatedOption');
+            const ageModal = document.getElementById('ageModal');
+            const ageYes = document.getElementById('ageYes');
+            const ageNo = document.getElementById('ageNo');
+            let clickCount = 0;
+            let ageVerified = false;
+            
+            hiddenTrigger.addEventListener('click', function() {
+                clickCount++;
+                if (clickCount === 3) {
+                    if (!ageVerified) {
+                        // Show age verification modal
+                        ageModal.style.display = 'flex';
+                    } else {
+                        // Already verified, show both options directly
+                        xRatedOption.classList.add('revealed');
+                        xxxRatedOption.classList.add('revealed');
+                        hiddenTrigger.style.display = 'none';
+                    }
+                }
+                
+                // Reset click count after 2 seconds
+                setTimeout(() => {
+                    clickCount = 0;
+                }, 2000);
+            });
+
+            // Age verification handlers
+            ageYes.addEventListener('click', function() {
+                ageVerified = true;
+                ageModal.style.display = 'none';
+                xRatedOption.classList.add('revealed');
+                xxxRatedOption.classList.add('revealed');
+                hiddenTrigger.style.display = 'none';
+                
+                // Store verification in session (not persistent)
+                sessionStorage.setItem('ageVerified', 'true');
+            });
+
+            ageNo.addEventListener('click', function() {
+                ageModal.style.display = 'none';
+                alert('Adult content features are not available for users under 18.');
+                // Reset everything
+                clickCount = 0;
+            });
+
+            // Check if age was already verified in this session
+            if (sessionStorage.getItem('ageVerified') === 'true') {
+                ageVerified = true;
+            }
+
+            // Close modal if clicked outside
+            ageModal.addEventListener('click', function(e) {
+                if (e.target === ageModal) {
+                    ageModal.style.display = 'none';
                 }
             });
         });
@@ -896,6 +1159,9 @@
             if (document.getElementById('allowProfanity').checked) options.languageVoice.push('allow profanity when appropriate');
             if (document.getElementById('spicy').checked) options.languageVoice.push('irritated/spicy tone');
             if (document.getElementById('controversy').checked) options.languageVoice.push('include mildly controversial opinions for engagement');
+            if (document.getElementById('seductive').checked) options.languageVoice.push('use seductive and alluring language');
+            if (document.getElementById('xRated').checked) options.languageVoice.push('include mature adult content appropriate for creative writing (18+)');
+            if (document.getElementById('xxxRated').checked) options.languageVoice.push('include explicit adult content for mature fiction and creative writing (18+)');
 
             // Audience Focus
             if (document.getElementById('personalBrand').checked) options.audienceFocus.push('write from individual perspective rather than company voice');
