@@ -121,11 +121,6 @@
             line-height: 1.2;
         }
 
-        .checkbox-item input[type="radio"] {
-            margin-right: 8px;
-            transform: scale(1.1);
-        }
-
         .generate-btn {
             background: linear-gradient(45deg, #8e44ad, #3498db);
             color: white;
@@ -368,16 +363,6 @@
                 <div class="option-group">
                     <h3>Modifications</h3>
                     <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="radio" name="characterOption" id="optimalChar" checked>
-                            <label for="optimalChar">Optimal Character Count</label>
-                            <div class="option-description">Restrict to ideal length for max engagement</div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="radio" name="characterOption" id="maxChar">
-                            <label for="maxChar">Max Character Count</label>
-                            <div class="option-description">Only limit to platform maximums</div>
-                        </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="hashtags" checked>
                             <label for="hashtags">Add Hashtags</label>
@@ -624,13 +609,8 @@
             const options = {
                 modifications: [],
                 tones: [],
-                characterStrategy: 'optimal'
+                characterStrategy: 'optimal' // Always use optimal now
             };
-
-            // Character count strategy
-            if (document.getElementById('maxChar').checked) {
-                options.characterStrategy = 'maximum';
-            }
 
             // Modifications
             if (document.getElementById('hashtags').checked) options.modifications.push('add relevant hashtags');
@@ -714,25 +694,20 @@
         }
 
         function createPrompt(originalPost, options) {
-            const characterInstructions = options.characterStrategy === 'optimal' 
-                ? 'Use OPTIMAL character counts for maximum engagement'
-                : 'Use up to MAXIMUM character limits for each platform';
-
-            return `Please adapt the following social media post for different platforms.
+            return `Please adapt the following social media post for different platforms using OPTIMAL character counts for maximum engagement.
 
 Original post: "${originalPost}"
 
-Character strategy: ${characterInstructions}
 Selected modifications: ${options.modifications.join(', ')}
 Selected tones: ${options.tones.join(', ')}
 
-Please provide adaptations for these platforms:
+Please provide adaptations for these platforms with optimal character counts:
 
-1. INSTAGRAM: ${options.characterStrategy === 'optimal' ? '125 characters optimal' : '2,200 character limit'}, engaging visual-focused content
-2. X/TWITTER: ${options.characterStrategy === 'optimal' ? '71-100 characters optimal' : '280 character limit'}, concise and impactful
-3. LINKEDIN: ${options.characterStrategy === 'optimal' ? '100 characters optimal' : '1,300 character limit'}, professional networking tone  
-4. MASTODON: ${options.characterStrategy === 'optimal' ? '200-400 characters recommended' : '500 character limit'}, community-focused, thoughtful
-5. BLUESKY: ${options.characterStrategy === 'optimal' ? '200-250 characters recommended' : '300 character limit'}, conversational and authentic
+1. INSTAGRAM: 125 characters optimal, engaging visual-focused content
+2. X/TWITTER: 71-100 characters optimal, concise and impactful
+3. LINKEDIN: 100 characters optimal, professional networking tone  
+4. MASTODON: 200-400 characters recommended, community-focused, thoughtful
+5. BLUESKY: 200-250 characters recommended, conversational and authentic
 6. TIKTOK: Brief engaging description for video context
 7. BLOG POST: Longer-form expanded content (no character restrictions)
 
@@ -760,7 +735,7 @@ Format your response exactly like this:
 [adapted content]
 
 Make sure each adaptation:
-- Follows the ${options.characterStrategy} character strategy
+- Uses optimal character counts for maximum engagement
 - Incorporates selected modifications appropriately
 - Matches the platform's audience and tone
 - Maintains the core message while optimizing for platform-specific engagement`;
