@@ -85,34 +85,6 @@
             color: #c0392b;
         }
 
-        .xxx-rated-option {
-            display: none !important;
-            animation: slideIn 0.3s ease-out 0.1s;
-        }
-
-        .xxx-rated-option.revealed {
-            display: flex !important;
-        }
-
-        .xxx-rated-option .checkbox-item {
-            border: 2px solid #8e44ad;
-            border-radius: 6px;
-            padding: 8px;
-            background: rgba(142, 68, 173, 0.15);
-            box-shadow: 0 0 10px rgba(142, 68, 173, 0.2);
-        }
-
-        .xxx-rated-option label {
-            color: #8e44ad;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .xxx-rated-option .option-description {
-            color: #7d3c98;
-            font-weight: 600;
-        }
-
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -797,12 +769,7 @@
                         <div class="checkbox-item x-rated-option" id="xRatedOption">
                             <input type="checkbox" id="xRated">
                             <label for="xRated">X-Rated Content</label>
-                            <div class="option-description">Mature adult content for creative writing (18+)</div>
-                        </div>
-                        <div class="checkbox-item xxx-rated-option" id="xxxRatedOption">
-                            <input type="checkbox" id="xxxRated">
-                            <label for="xxxRated">XXX-Rated Content</label>
-                            <div class="option-description">Explicit adult content for mature fiction (18+)</div>
+                            <div class="option-description">Suggestive creative writing with mature themes (18+)</div>
                         </div>
                     </div>
                 </div>
@@ -1061,7 +1028,6 @@
             // Hidden trigger for adult content options
             const hiddenTrigger = document.getElementById('hiddenTrigger');
             const xRatedOption = document.getElementById('xRatedOption');
-            const xxxRatedOption = document.getElementById('xxxRatedOption');
             const ageModal = document.getElementById('ageModal');
             const ageYes = document.getElementById('ageYes');
             const ageNo = document.getElementById('ageNo');
@@ -1081,9 +1047,8 @@
                         console.log('Showing age verification modal');
                         ageModal.style.display = 'flex';
                     } else {
-                        console.log('Age already verified, showing options');
+                        console.log('Age already verified, showing X-rated option');
                         xRatedOption.classList.add('revealed');
-                        xxxRatedOption.classList.add('revealed');
                         hiddenTrigger.style.display = 'none';
                     }
                 }
@@ -1103,12 +1068,11 @@
                 ageVerified = true;
                 ageModal.style.display = 'none';
                 xRatedOption.classList.add('revealed');
-                xxxRatedOption.classList.add('revealed');
                 hiddenTrigger.style.display = 'none';
                 
                 // Store verification in session (not persistent)
                 sessionStorage.setItem('ageVerified', 'true');
-                console.log('Adult content options revealed');
+                console.log('X-rated content option revealed');
             });
 
             ageNo.addEventListener('click', function() {
@@ -1179,8 +1143,7 @@
             if (document.getElementById('spicy').checked) options.languageVoice.push('irritated/spicy tone');
             if (document.getElementById('controversy').checked) options.languageVoice.push('include mildly controversial opinions for engagement');
             if (document.getElementById('seductive').checked) options.languageVoice.push('use seductive and alluring language');
-            if (document.getElementById('xRated').checked) options.languageVoice.push('include mature adult content appropriate for creative writing (18+)');
-            if (document.getElementById('xxxRated').checked) options.languageVoice.push('include explicit adult content for mature fiction and creative writing (18+)');
+            if (document.getElementById('xRated').checked) options.languageVoice.push('use suggestive and provocative language appropriate for mature creative writing, with sensual metaphors, double entendres, and creative visual descriptions that imply rather than state explicitly');
 
             // Audience Focus
             if (document.getElementById('personalBrand').checked) options.audienceFocus.push('write from individual perspective rather than company voice');
