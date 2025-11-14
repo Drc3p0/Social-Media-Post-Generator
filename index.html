@@ -51,6 +51,14 @@
             margin-bottom: 30px;
         }
 
+        .post-label {
+            display: block;
+            font-weight: 600;
+            color: #5d4e75;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
         .main-input {
             width: 100%;
             min-height: 120px;
@@ -60,13 +68,119 @@
             font-size: 16px;
             font-family: inherit;
             resize: vertical;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             transition: border-color 0.3s;
+        }
+
+        .post-guidance {
+            margin-bottom: 20px;
+        }
+
+        .guidance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .char-counter {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .char-counter.over-limit {
+            color: #e74c3c;
+        }
+
+        .guidance-text {
+            font-size: 12px;
+            color: #8e44ad;
+            font-style: italic;
         }
 
         .main-input:focus {
             outline: none;
             border-color: #8e44ad;
+        }
+
+        .links-section {
+            margin-bottom: 20px;
+        }
+
+        .links-label {
+            display: block;
+            font-weight: 600;
+            color: #5d4e75;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .links-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 8px;
+            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .links-input:focus {
+            outline: none;
+            border-color: #8e44ad;
+        }
+
+        .links-description {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        .notes-section {
+            margin-bottom: 20px;
+        }
+
+        .notes-label {
+            display: block;
+            font-weight: 600;
+            color: #8e44ad;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .notes-input {
+            width: 100%;
+            min-height: 90px;
+            padding: 12px;
+            border: 2px solid #e8d5ff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 8px;
+            transition: border-color 0.3s;
+            background: rgba(232, 213, 255, 0.3);
+        }
+
+        .notes-input:focus {
+            outline: none;
+            border-color: #8e44ad;
+            background: rgba(232, 213, 255, 0.5);
+        }
+
+        .notes-description {
+            font-size: 12px;
+            color: #8e44ad;
+            font-style: italic;
+            line-height: 1.3;
+            font-weight: 500;
         }
 
         .options-grid {
@@ -165,6 +279,43 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .copy-all-section {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .copy-all-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .copy-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .copy-all-btn.copied {
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+        }
+
+        .copy-all-description {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
         }
 
         .outputs-grid {
@@ -353,11 +504,38 @@
         </div>
 
         <div class="input-section">
+            <label for="originalPost" class="post-label">Your Original Post</label>
             <textarea 
                 class="main-input" 
                 id="originalPost" 
-                placeholder="Enter your original post here...">
+                placeholder="Type your post here...">
             </textarea>
+            <div class="post-guidance">
+                <div class="guidance-row">
+                    <span class="char-counter" id="postCharCount">0 / 2000 characters</span>
+                    <span class="guidance-text">Min: 10 characters • Keep it authentic and conversational</span>
+                </div>
+            </div>
+            
+            <div class="links-section">
+                <label for="referenceLinks" class="links-label">Reference Links (optional)</label>
+                <textarea 
+                    class="links-input" 
+                    id="referenceLinks" 
+                    placeholder="Add any reference links here (one per line)&#10;https://example.com/article&#10;https://youtube.com/watch?v=...&#10;https://github.com/project">
+                </textarea>
+                <div class="links-description">Add links that relate to your post content. Claude will reference these when adapting your posts.</div>
+            </div>
+
+            <div class="notes-section">
+                <label for="internalNotes" class="notes-label">Internal Notes to Claude (optional)</label>
+                <textarea 
+                    class="notes-input" 
+                    id="internalNotes" 
+                    placeholder="Add private instructions for Claude here...&#10;Examples:&#10;- Emphasize the technical aspects&#10;- Avoid mentioning competitors&#10;- Focus on beginner-friendly language&#10;- This was a struggle, show vulnerability&#10;- Target audience is developers&#10;- Keep it lighthearted despite serious topic">
+                </textarea>
+                <div class="notes-description">Private instructions for Claude. This content will guide the adaptation but won't appear in your final posts.</div>
+            </div>
             
             <div class="options-grid">
                 <div class="option-group">
@@ -488,6 +666,13 @@
         <div class="loading" id="loadingIndicator">
             <div class="loading-spinner"></div>
             <p>Adapting your post for all platforms...</p>
+        </div>
+
+        <div class="copy-all-section" id="copyAllSection" style="display: none;">
+            <button class="copy-all-btn" id="copyAllBtn" onclick="copyAllPosts()">
+                📋 Copy All Posts
+            </button>
+            <div class="copy-all-description">Copy all platform adaptations to clipboard for easy batch posting</div>
         </div>
 
         <div class="outputs-grid" id="outputsGrid" style="display: none;">
@@ -649,6 +834,21 @@
             updateCharacterCount('blueskyOutput', 'blueskyCount', {min: 200, max: 300});
             updateCharacterCount('tiktokOutput', 'tiktokCount', {min: 50, max: 150});
             updateCharacterCount('blogOutput', 'blogCount', null);
+
+            // Add character counting for main input
+            const mainInput = document.getElementById('originalPost');
+            const charCounter = document.getElementById('postCharCount');
+            
+            mainInput.addEventListener('input', function() {
+                const length = mainInput.value.length;
+                charCounter.textContent = `${length} / 2000 characters`;
+                
+                if (length > 2000) {
+                    charCounter.classList.add('over-limit');
+                } else {
+                    charCounter.classList.remove('over-limit');
+                }
+            });
         });
 
         // Copy to clipboard function
@@ -713,6 +913,8 @@
         // Generate posts using Claude API
         async function generatePosts() {
             const originalPost = document.getElementById('originalPost').value.trim();
+            const referenceLinks = document.getElementById('referenceLinks').value.trim();
+            const internalNotes = document.getElementById('internalNotes').value.trim();
             
             if (!originalPost) {
                 alert('Please enter a post to adapt!');
@@ -731,6 +933,35 @@
                 return;
             }
 
+            // Validate links if provided
+            let validatedLinks = [];
+            if (referenceLinks) {
+                const links = referenceLinks.split('\n').filter(link => link.trim());
+                
+                // Basic URL validation
+                const urlPattern = /^https?:\/\/[^\s$.?#].[^\s]*$/i;
+                for (let link of links) {
+                    link = link.trim();
+                    if (link && !urlPattern.test(link)) {
+                        alert(`Invalid URL format: ${link}\nPlease use format: https://example.com`);
+                        return;
+                    }
+                    if (link) validatedLinks.push(link);
+                }
+
+                // Limit number of links
+                if (validatedLinks.length > 5) {
+                    alert('Please limit to 5 reference links maximum.');
+                    return;
+                }
+            }
+
+            // Validate internal notes length (reasonable limit)
+            if (internalNotes.length > 1000) {
+                alert('Internal notes too long. Please keep under 1000 characters.');
+                return;
+            }
+
             const options = getSelectedOptions();
             const generateBtn = document.getElementById('generateBtn');
             const loadingIndicator = document.getElementById('loadingIndicator');
@@ -746,10 +977,11 @@
             generateBtn.textContent = 'Generating...';
             loadingIndicator.style.display = 'block';
             outputsGrid.style.display = 'none';
+            document.getElementById('copyAllSection').style.display = 'none';
 
             try {
                 // Create the prompt for Claude
-                const prompt = createPrompt(originalPost, options);
+                const prompt = createPrompt(originalPost, options, validatedLinks, internalNotes);
                 
                 // Call our secure Netlify function
                 const response = await fetch("/.netlify/functions/generate-posts", {
@@ -789,6 +1021,7 @@
 
                 // Show results
                 outputsGrid.style.display = 'grid';
+                document.getElementById('copyAllSection').style.display = 'block';
                 outputsGrid.scrollIntoView({ behavior: 'smooth' });
 
                 // Start cooldown timer (30 seconds)
@@ -805,6 +1038,56 @@
             } finally {
                 // Reset loading indicator
                 loadingIndicator.style.display = 'none';
+            }
+        }
+
+        // Copy all posts to clipboard
+        async function copyAllPosts() {
+            const platforms = [
+                { name: 'INSTAGRAM', id: 'instagramOutput' },
+                { name: 'X (TWITTER)', id: 'xOutput' },
+                { name: 'LINKEDIN', id: 'linkedinOutput' },
+                { name: 'MASTODON', id: 'mastodonOutput' },
+                { name: 'BLUESKY', id: 'blueskyOutput' },
+                { name: 'TIKTOK', id: 'tiktokOutput' },
+                { name: 'BLOG POST', id: 'blogOutput' }
+            ];
+
+            let allContent = [];
+            
+            for (const platform of platforms) {
+                const textarea = document.getElementById(platform.id);
+                if (textarea && textarea.value.trim()) {
+                    allContent.push(`=== ${platform.name} ===`);
+                    allContent.push(textarea.value.trim());
+                    allContent.push(''); // Empty line between platforms
+                }
+            }
+
+            if (allContent.length === 0) {
+                alert('No content to copy. Please generate posts first.');
+                return;
+            }
+
+            const finalContent = allContent.join('\n');
+            
+            try {
+                await navigator.clipboard.writeText(finalContent);
+                
+                // Update button to show success
+                const copyAllBtn = document.getElementById('copyAllBtn');
+                const originalText = copyAllBtn.textContent;
+                copyAllBtn.textContent = '✅ Copied All Posts!';
+                copyAllBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyAllBtn.textContent = originalText;
+                    copyAllBtn.classList.remove('copied');
+                }, 3000);
+                
+            } catch (err) {
+                console.error('Failed to copy all posts: ', err);
+                alert('Failed to copy to clipboard. Please try copying individual posts.');
             }
         }
 
@@ -828,19 +1111,52 @@
             
             countdown();
         }
+        function startCooldown(seconds) {
+            const generateBtn = document.getElementById('generateBtn');
+            let remainingSeconds = seconds;
+            
+            const countdown = () => {
+                generateBtn.disabled = true;
+                generateBtn.textContent = `Please wait ${remainingSeconds} seconds`;
+                remainingSeconds--;
+                
+                if (remainingSeconds < 0) {
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = 'Generate Adapted Posts';
+                } else {
+                    setTimeout(countdown, 1000);
+                }
+            };
+            
+            countdown();
+        }
 
-        function createPrompt(originalPost, options) {
+        function createPrompt(originalPost, options, referenceLinks = [], internalNotes = '') {
             // Combine all selected options into readable lists
             const allModifications = options.contentMods.concat(options.engagementElements);
             const allToneElements = options.tones.concat(options.languageVoice);
             
+            // Format reference links section
+            const linksSection = referenceLinks.length > 0 
+                ? `\n\nREFERENCE LINKS to consider when adapting:\n${referenceLinks.map((link, index) => `${index + 1}. ${link}`).join('\n')}`
+                : '';
+            
+            // Format internal notes section
+            const notesSection = internalNotes.trim() 
+                ? `\n\nINTERNAL NOTES (for guidance only - DO NOT include this content in final posts):\n${internalNotes.trim()}`
+                : '';
+            
             return `Please adapt the following social media post for different platforms using OPTIMAL character counts for maximum engagement.
 
-Original post: "${originalPost}"
+Original post: "${originalPost}"${linksSection}${notesSection}
 
 CONTENT MODIFICATIONS: ${allModifications.length > 0 ? allModifications.join(', ') : 'none selected'}
 TONE & STYLE: ${allToneElements.length > 0 ? allToneElements.join(', ') : 'none selected'}
 AUDIENCE FOCUS: ${options.audienceFocus.length > 0 ? options.audienceFocus.join(', ') : 'general audience'}
+
+${referenceLinks.length > 0 ? 'IMPORTANT: When reference links are provided, naturally incorporate context from these links into the adapted posts where relevant. You can mention or reference the content, but do not include the actual URLs in the final posts unless specifically requested.' : ''}
+
+${internalNotes.trim() ? 'CRITICAL: The internal notes above are private instructions to guide your adaptation. Use them to inform your approach, tone, and content focus, but NEVER include any of the internal notes text directly in your final posts.' : ''}
 
 CRITICAL HUMAN-LIKE WRITING RULES - Follow these to make content undetectable as AI-written:
 - NEVER use em dashes (—) - use regular hyphens (-) or other punctuation
@@ -894,6 +1210,8 @@ Make sure each adaptation:
 - Uses optimal character counts for maximum engagement
 - Sounds genuinely human-written using the rules above
 - Incorporates ALL selected modifications, tones, and audience focus appropriately
+- ${referenceLinks.length > 0 ? 'References the provided links contextually where relevant' : 'Focuses on the original post content'}
+- ${internalNotes.trim() ? 'Follows the guidance in the internal notes without including any of that text directly' : 'Stays true to the original post intent'}
 - Matches the platform's audience and tone
 - Maintains the core message while optimizing for platform-specific engagement`;
         }
