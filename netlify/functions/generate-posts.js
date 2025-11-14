@@ -57,16 +57,16 @@ function isDuplicateContent(ip, content) {
   
   const userHistory = contentHistory.get(ip);
   const now = Date.now();
-  const hourAgo = now - (60 * 60 * 1000);
+  const tenMinutesAgo = now - (10 * 60 * 1000); // Reduced from 1 hour to 10 minutes
   
   // Clean old history
-  const recentHistory = userHistory.filter(entry => entry.time > hourAgo);
+  const recentHistory = userHistory.filter(entry => entry.time > tenMinutesAgo);
   contentHistory.set(ip, recentHistory);
   
-  // Check for duplicates (90% similarity)
+  // Check for duplicates (95% similarity instead of 90%)
   for (const entry of recentHistory) {
     const similarity = calculateSimilarity(normalizedContent, entry.content);
-    if (similarity > 0.9) return true;
+    if (similarity > 0.95) return true; // Increased threshold - only blocks near-identical content
   }
   
   // Add current content to history
