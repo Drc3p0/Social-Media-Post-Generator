@@ -1276,6 +1276,20 @@
                 
                 const claudeResponse = data.content;
 
+                // Check if Claude refused the content due to policy violations
+                if (claudeResponse && (
+                    claudeResponse.includes("I'm not able to help") ||
+                    claudeResponse.includes("not appropriate for me to") ||
+                    claudeResponse.includes("contains sexually suggestive") ||
+                    claudeResponse.includes("explicit content") ||
+                    claudeResponse.includes("I can't create content") ||
+                    claudeResponse.includes("safety guidelines")
+                )) {
+                    // Show helpful feedback instead of blank results
+                    showContentPolicyFeedback();
+                    return;
+                }
+
                 // Parse and populate the outputs
                 parseAndPopulateOutputs(claudeResponse);
 
@@ -1301,7 +1315,55 @@
             }
         }
 
-        // Copy all posts to clipboard
+        // Show helpful feedback when Claude refuses content
+        function showContentPolicyFeedback() {
+            // Clear any existing content
+            const platforms = ['instagramOutput', 'xOutput', 'linkedinOutput', 'mastodonOutput', 'blueskyOutput', 'tiktokOutput', 'blogOutput'];
+            platforms.forEach(id => {
+                document.getElementById(id).value = '';
+            });
+
+            // Show the results grid with feedback message
+            const outputsGrid = document.getElementById('outputsGrid');
+            outputsGrid.style.display = 'grid';
+            
+            // Create feedback message
+            const feedbackMessage = `⚠️ CONTENT POLICY NOTICE
+
+Your content was too explicit for Claude's content policies. Even with X-rated options enabled, Claude won't enhance already sexual content.
+
+🎯 HOW TO FIX THIS:
+
+✅ START WITH INNOCENT CONTENT:
+Instead of: "Let's feel each other's bodies..."
+Try: "Just got new LED earrings for dancing tonight!"
+
+✅ USE INTERNAL NOTES FOR DIRECTION:
+Original: Keep it clean and neutral
+Internal Notes: "Make this sound exciting and electric"
+
+✅ LET X-RATED ADD THE SPICE:
+The X-rated option will transform innocent content into suggestive language using metaphors and double meanings.
+
+🔄 TRY AGAIN WITH:
+- Remove explicit language from your original post
+- Start with innocent content about the same topic
+- Use Internal Notes to guide the tone instead
+- Let the X-rated option do the suggestive transformation
+
+💡 EXAMPLES THAT WORK:
+"New electronics project finished!" → Becomes suggestive
+"Great workout today!" → Gets steamy undertones  
+"Cooking something special tonight!" → Takes on sensual meaning
+
+The more innocent your starting content, the better the suggestive results!`;
+
+            // Put feedback in the Instagram output (first visible box)
+            document.getElementById('instagramOutput').value = feedbackMessage;
+            
+            // Scroll to results
+            outputsGrid.scrollIntoView({ behavior: 'smooth' });
+        }
         async function copyAllPosts() {
             const platforms = [
                 { name: 'INSTAGRAM', id: 'instagramOutput' },
