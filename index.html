@@ -41,18 +41,23 @@
 
         .hidden-trigger {
             position: absolute;
-            top: -5px;
-            right: -10px;
+            top: 10px;
+            right: 10px;
             cursor: pointer;
-            opacity: 0.15;
-            transition: opacity 0.3s;
-            font-size: 1.5rem;
-            color: #8e44ad;
+            opacity: 0.02;
+            transition: all 0.3s;
+            font-size: 0.6rem;
             user-select: none;
+            padding: 1px;
+            border-radius: 50%;
+            background: transparent;
         }
 
         .hidden-trigger:hover {
-            opacity: 0.8;
+            opacity: 0.3;
+            transform: rotate(30deg);
+            background: rgba(142, 68, 173, 0.05);
+            font-size: 0.7rem;
         }
 
         .x-rated-option {
@@ -670,8 +675,9 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Social Media Post Adapter<span class="hidden-trigger" id="hiddenTrigger">.</span></h1>
+            <h1>Social Media Post Adapter</h1>
             <p>Optimize your posts for maximum engagement across all platforms</p>
+            <div class="hidden-trigger" id="hiddenTrigger" title="Advanced Options">⚙️</div>
         </div>
 
         <div class="input-section">
