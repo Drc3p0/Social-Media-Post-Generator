@@ -39,141 +39,9 @@
             position: relative;
         }
 
-        .hidden-trigger {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            opacity: 0.02;
-            transition: all 0.3s;
-            font-size: 0.6rem;
-            user-select: none;
-            padding: 1px;
-            border-radius: 50%;
-            background: transparent;
-        }
-
-        .hidden-trigger:hover {
-            opacity: 0.3;
-            transform: rotate(30deg);
-            background: rgba(142, 68, 173, 0.05);
-            font-size: 0.7rem;
-        }
-
-        .x-rated-option {
-            display: none !important;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .x-rated-option.revealed {
-            display: flex !important;
-        }
-
-        .x-rated-option .checkbox-item {
-            border: 2px solid #e74c3c;
-            border-radius: 6px;
-            padding: 8px;
-            background: rgba(231, 76, 60, 0.1);
-        }
-
-        .x-rated-option label {
-            color: #e74c3c;
-            font-weight: 600;
-        }
-
-        .x-rated-option .option-description {
-            color: #c0392b;
-        }
-
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        .age-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .age-modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        .age-modal-content h3 {
-            color: #e74c3c;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-
-        .age-modal-content p {
-            margin-bottom: 15px;
-            line-height: 1.4;
-            color: #333;
-        }
-
-        .age-modal-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .age-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .age-yes {
-            background: #27ae60;
-            color: white;
-        }
-
-        .age-yes:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-        }
-
-        .age-no {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .age-no:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-        }
-
-        .age-modal-footer {
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-            margin-top: 20px;
-        }
-
-        .age-modal-footer small {
-            color: #666;
-            font-style: italic;
-            line-height: 1.3;
         }
 
         @keyframes fadeIn {
@@ -707,7 +575,6 @@
         <div class="header">
             <h1>Social Media Post Adapter</h1>
             <p>Optimize your posts for maximum engagement across all platforms</p>
-            <div class="hidden-trigger" id="hiddenTrigger" title="Advanced Options">⚙️</div>
         </div>
 
         <div class="input-section">
@@ -831,11 +698,6 @@
                             <input type="checkbox" id="gratitude">
                             <label for="gratitude">Grateful/Appreciative</label>
                             <div class="option-description">Emphasizes thankfulness and appreciation</div>
-                        </div>
-                        <div class="checkbox-item x-rated-option" id="xRatedOption">
-                            <input type="checkbox" id="xRated">
-                            <label for="xRated">X-Rated Content</label>
-                            <div class="option-description">Suggestive creative writing with mature themes (18+)</div>
                         </div>
                     </div>
                 </div>
@@ -1033,22 +895,6 @@
         </div>
     </div>
 
-    <!-- Age Verification Modal -->
-    <div class="age-modal" id="ageModal" style="display: none;">
-        <div class="age-modal-content">
-            <h3>Age Verification Required</h3>
-            <p>The X-Rated Content feature is intended for creative writing purposes only and contains mature themes suitable for adults.</p>
-            <p><strong>Are you 18 years of age or older?</strong></p>
-            <div class="age-modal-buttons">
-                <button class="age-btn age-yes" id="ageYes">Yes, I am 18+</button>
-                <button class="age-btn age-no" id="ageNo">No, I am under 18</button>
-            </div>
-            <div class="age-modal-footer">
-                <small>This feature is for legitimate creative writing purposes such as fantasy novels, adult fiction, and literary content.</small>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Character count tracking
         function updateCharacterCount(textareaId, countId, optimalRange) {
@@ -1128,78 +974,6 @@
                         }, 50);
                     });
                 }
-            });
-
-            // Hidden trigger for adult content options
-            const hiddenTrigger = document.getElementById('hiddenTrigger');
-            const xRatedOption = document.getElementById('xRatedOption');
-            const ageModal = document.getElementById('ageModal');
-            const ageYes = document.getElementById('ageYes');
-            const ageNo = document.getElementById('ageNo');
-            let clickCount = 0;
-            let ageVerified = false;
-            
-            console.log('Hidden trigger initialized:', hiddenTrigger);
-            
-            hiddenTrigger.addEventListener('click', function() {
-                clickCount++;
-                console.log('Hidden trigger clicked, count:', clickCount);
-                
-                if (clickCount === 3) {
-                    console.log('Triple click detected, age verified:', ageVerified);
-                    
-                    if (!ageVerified) {
-                        console.log('Showing age verification modal');
-                        ageModal.style.display = 'flex';
-                    } else {
-                        console.log('Age already verified, showing X-rated option');
-                        xRatedOption.classList.add('revealed');
-                        hiddenTrigger.style.display = 'none';
-                    }
-                }
-                
-                // Reset click count after 2 seconds
-                setTimeout(() => {
-                    if (clickCount < 3) {
-                        console.log('Click count reset');
-                        clickCount = 0;
-                    }
-                }, 2000);
-            });
-
-            // Age verification handlers
-            ageYes.addEventListener('click', function() {
-                console.log('Age verification: Yes clicked');
-                ageVerified = true;
-                ageModal.style.display = 'none';
-                xRatedOption.classList.add('revealed');
-                hiddenTrigger.style.display = 'none';
-                
-                // Store verification in session (not persistent)
-                sessionStorage.setItem('ageVerified', 'true');
-                console.log('X-rated content option revealed');
-            });
-
-            ageNo.addEventListener('click', function() {
-                console.log('Age verification: No clicked');
-                ageModal.style.display = 'none';
-                alert('Adult content features are not available for users under 18.');
-                clickCount = 0;
-            });
-
-            // Check if age was already verified in this session
-            if (sessionStorage.getItem('ageVerified') === 'true') {
-                console.log('Age verification found in session storage');
-                ageVerified = true;
-            }
-
-            // Close modal if clicked outside
-            ageModal.addEventListener('click', function(e) {
-                if (e.target === ageModal) {
-                    console.log('Modal closed by clicking outside');
-                    ageModal.style.display = 'none';
-                }
-            });
         });
 
         // Copy to clipboard function
@@ -1252,7 +1026,6 @@
             if (document.getElementById('playful').checked) options.languageVoice.push('use playful, fun, and whimsical language');
             if (document.getElementById('enthusiastic').checked) options.languageVoice.push('use highly enthusiastic and energetic language');
             if (document.getElementById('gratitude').checked) options.languageVoice.push('emphasize gratitude, appreciation, and thankfulness');
-            if (document.getElementById('xRated').checked) options.languageVoice.push('use suggestive and provocative language appropriate for mature creative writing, with sensual metaphors, double entendres, and creative visual descriptions that imply rather than state explicitly');
 
             // Audience Focus
             if (document.getElementById('personalBrand').checked) options.audienceFocus.push('write from individual perspective rather than company voice');
